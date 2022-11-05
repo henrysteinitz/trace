@@ -5,7 +5,7 @@ import unittest
 from associative import AssociativeAttention
 
 
-class TestScaledDotProductAttention(unittest.TestCase):
+class TestAssociativeAttention(unittest.TestCase):
 
 	def test_single_attention(self):
 		module = AssociativeAttention()
