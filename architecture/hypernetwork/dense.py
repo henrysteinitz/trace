@@ -22,12 +22,15 @@ class DenseHypernetwork(nn.Module):
 	# that act on multiple tensors.
 	def forward(self, x):
 		x = torch.flatten(x, start_dim=1, end_dim=-1)
+
+		base_model_state = self.base_model.state_dict()
 		for name in self.named_submodels:
 			# Reshape submodel output
 			submodel_out = self.named_submodels[name](x)
-			torch.reshape(submodel_out, self.base_model.state_dict()[name].size())
-
+			submodel_out = torch.reshape(submodel_out, base_model_state[name].size())
+			
 			# Set base model weights to submodel output.
-			self.base_model.state_dict()[name] = submodel_out
-
+			base_model_state[name] = submodel_out
+		
+		self.base_model.load_state_dict(base_model_state)
 		return self.base_model(x)
