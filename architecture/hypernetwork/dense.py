@@ -19,18 +19,18 @@ class DenseHypernetwork(nn.Module):
 
 
 	# TODO: Generalize forward method to accomodate base_models 
-	# that act on multiple tensors.
+	# that act on multiple tensors. 
+	# TODO: Support batch sizes > 1. Either average over subodel 
+	# outputs per batch or compute each batch example individually.
 	def forward(self, x):
 		x = torch.flatten(x, start_dim=1, end_dim=-1)
 
-		base_model_state = self.base_model.state_dict()
 		for name in self.named_submodels:
 			# Reshape submodel output
 			submodel_out = self.named_submodels[name](x)
-			submodel_out = torch.reshape(submodel_out, base_model_state[name].size())
+			submodel_out = torch.reshape(submodel_out, getattr(self.base_model, name).size())
 			
 			# Set base model weights to submodel output.
-			base_model_state[name] = submodel_out
-		
-		self.base_model.load_state_dict(base_model_state)
+			self.base_model.__dict__[name] = submodel_out
+
 		return self.base_model(x)
