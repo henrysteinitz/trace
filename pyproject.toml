@@ -1,0 +1,7 @@
+[tool.poetry]
+name = "trace"
+version = "0.1.0"
+description = ""
+authors = ["Henry Julius Steinitz III"]
+license = "MIT"
+readme = "README.md"
