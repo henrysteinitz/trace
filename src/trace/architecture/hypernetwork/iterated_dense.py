@@ -1,12 +1,13 @@
 from dense import DenseHypernetwork
-
+from torch import nn
 
 class IteratedDenseHypernetwork(nn.Module):
 
-	def __init__(self, base_model, num_iterations, input_size):
-		self.models = ModuleList([base_model])
+	def __init__(self, base_model, num_iterations, input_shape):
+		super().__init__()
+		self.models = nn.ModuleList([base_model])
 		for i in range(num_iterations):
-			self.model.append(DenseHypernetwork(self.models[-1]))
+			self.models.append(DenseHypernetwork(self.models[-1], input_shape=input_shape))
 
 
 	def forward(self, x):
