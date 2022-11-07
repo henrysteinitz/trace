@@ -12,7 +12,9 @@ class DenseHypernetwork(nn.Module):
 		in_features = numpy.prod(input_shape)
 
 		for name, parameter in self.base_model.named_parameters():
-			self.named_submodels[name] = nn.Linear(
+			# Module names cannot contain '.'.
+			modified_name = name.replace(".", "_")
+			self.named_submodels[modified_name] = nn.Linear(
 				in_features=in_features, 
 				out_features=numpy.prod(parameter.size()), 
 				bias=True)
@@ -26,11 +28,17 @@ class DenseHypernetwork(nn.Module):
 		x = torch.flatten(x, start_dim=1, end_dim=-1)
 
 		for name in self.named_submodels:
-			# Reshape submodel output
+			# Access nested module.
+			module_path = name.split("_")
+			base_model = self.base_model
+			for i in range(len(module_path) - 1):
+				base_model = base_model._modules[module_path[i]]
+
+			# Reshape submodel output.
 			submodel_out = self.named_submodels[name](x)
-			submodel_out = torch.reshape(submodel_out, getattr(self.base_model, name).size())
-			
+			submodel_out = torch.reshape(submodel_out, getattr(base_model, module_path[-1]).size())
+
 			# Set base model weights to submodel output.
-			self.base_model.__dict__[name] = submodel_out
+			base_model.__dict__[module_path[-1]] = submodel_out
 
 		return self.base_model(x)
