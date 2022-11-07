@@ -6,6 +6,7 @@ from torch.utils.data import Dataset, DataLoader
 
 from dense import DenseHypernetwork
 
+
 # TODO: Move into evaluation/dataset/regression
 class SyntheticLinearRegressionDataset(Dataset):
 

@@ -4,6 +4,7 @@ import unittest
 
 from scaled_dot_product import ScaledDotProductAttention
 
+
 class TestScaledDotProductAttention(unittest.TestCase):
 
 	def test_single_attention(self):
