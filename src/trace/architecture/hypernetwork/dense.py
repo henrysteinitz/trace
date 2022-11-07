@@ -38,7 +38,10 @@ class DenseHypernetwork(nn.Module):
 			submodel_out = self.named_submodels[name](x)
 			submodel_out = torch.reshape(submodel_out, getattr(base_model, module_path[-1]).size())
 
-			# Set base model weights to submodel output.
+			# Set base model weights to submodel output. We need to attach the tensor directly
+			# to base_model.__dict__ because Module.__setattr__ enforces that existing parameters 
+			# remain parameters. We cannot contruct a parameter from our tensor because that will
+			# erase its computational history and break future gradient computations. 
 			base_model.__dict__[module_path[-1]] = submodel_out
 
 		return self.base_model(x)
