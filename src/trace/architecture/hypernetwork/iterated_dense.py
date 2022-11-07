@@ -1,6 +1,7 @@
 from dense import DenseHypernetwork
 from torch import nn
 
+
 class IteratedDenseHypernetwork(nn.Module):
 
 	def __init__(self, base_model, num_iterations, input_shape):
