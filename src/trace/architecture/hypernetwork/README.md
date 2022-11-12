@@ -1,5 +1,5 @@
 # Hypernetworks and Iterated Hypernetworks
 
-![alt text](https://raw.githubusercontent.com/henrysteinitz/trace/main/assets/iterated_hypernetwork.png)
-
 We show that depth-n linear hypernetworks with linear weight-generating networks compute degree-n polynomials. We also argue that hypernetworks with weight-generating networks that have fully-connected final layers are as easier to train as ordinary neural networks. These arguments theoretically motivate a new class of highly expressive models called *iterated hypernetworks*, which have weight-generating networks are also hypernetworks. We show that iterated hypernetworks with $n^k$ layers total can compute polynomials with degree up to $\exp(\exp\dots\exp(n,n),\dots n), n) (k \text{ times})$. We then evaluate the performance of iterated linear hyperneworks on nolinear regression tasks.
+
+![alt text](https://raw.githubusercontent.com/henrysteinitz/trace/main/assets/iterated_hypernetwork.png)
