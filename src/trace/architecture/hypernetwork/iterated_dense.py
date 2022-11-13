@@ -1,5 +1,5 @@
-from dense import DenseHypernetwork
 from torch import nn
+from trace.architecture.hypernetwork.dense import DenseHypernetwork
 
 
 class IteratedDenseHypernetwork(nn.Module):

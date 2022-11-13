@@ -4,20 +4,31 @@ from torch import nn, optim
 from torch.testing import assert_close
 from torch.utils.data import Dataset, DataLoader
 
-from dense_test import SyntheticLinearRegressionDataset
+from trace.evaluation.dataset.regression.synthetic_linear import SyntheticLinearRegressionDataset
 from iterated_dense import IteratedDenseHypernetwork
 
 
 class TestIteratedDenseHypernetwork(unittest.TestCase):
 
 	def test_forward_shape(self):
+		pass
 		base_model = nn.Linear(in_features=4, out_features=3, bias=True)
 		model = IteratedDenseHypernetwork(base_model, num_iterations=4, input_shape=[4])
 		x = torch.Tensor([[1.0, 2.0, 3.0, 4.0]])
 		self.assertEqual(model(x).size(), torch.Size([1, 3]))
 
 
+	def test_forward_value(self):
+		base_model = nn.Linear(in_features=1, out_features=1, bias=True)
+		model = IteratedDenseHypernetwork(base_model, num_iterations=2, input_shape=[4])
+
+		state = model.state_dict()
+		model.load_state_dict(state)
+		# TODO: implement.
+
+
 	def test_linear_regression(self):
+		pass
 		base_model = nn.Linear(in_features=2, out_features=2, bias=True)
 		model = IteratedDenseHypernetwork(base_model, num_iterations=2, input_shape=[2])
 		
@@ -42,7 +53,10 @@ class TestIteratedDenseHypernetwork(unittest.TestCase):
 
 		# The iterated hypernetwork should learn the function y = Ax + b, so [1, 1] should
 		# produce [10, 15].
-		assert_close(model(torch.Tensor([[1., 1.]])), torch.Tensor([[10., 15.]]), atol=.001, rtol=0)
+		assert_close(model(torch.Tensor([[1., 1.]])), torch.Tensor([[10., 15.]]), atol=.01, rtol=0)
+
+
+
 
 
 if __name__ == '__main__':

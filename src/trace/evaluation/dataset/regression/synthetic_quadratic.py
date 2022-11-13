@@ -2,11 +2,11 @@ import torch
 from torch.utils.data import Dataset
 
 
-class SyntheticLinearRegressionDataset(Dataset):
+class SyntheticQuadraticRegressionDataset(Dataset):
 
     def __init__(self, A, b, size):
         self.X = [torch.rand_like(b) for _ in range(size)]
-        self.Y = [torch.matmul(A, x) + b for x in self.X]
+        self.Y = [torch.matmul(torch.matmul(A, x), x) + torch.matmul(A, x) + b for x in self.X]
 
 
     def __len__(self):

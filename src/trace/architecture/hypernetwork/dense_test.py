@@ -3,39 +3,11 @@ import unittest
 from torch import nn, optim
 from torch.testing import assert_close
 from torch.utils.data import Dataset, DataLoader
+from trace.analysis import sensitivity
 
 from dense import DenseHypernetwork
-
-
-# TODO: Move into evaluation/dataset/regression
-class SyntheticLinearRegressionDataset(Dataset):
-
-    def __init__(self, A, b, size):
-        self.X = [torch.rand_like(b) for _ in range(size)]
-        self.Y = [torch.matmul(A, x) + b for x in self.X]
-
-
-    def __len__(self):
-        return len(self.X)
-
-
-    def __getitem__(self, idx):
-        return self.X[idx], self.Y[idx]
-
-
-class SyntheticQuadraticRegressionDataset(Dataset):
-
-    def __init__(self, A, b, size):
-        self.X = [torch.rand_like(b) for _ in range(size)]
-        self.Y = [torch.matmul(torch.matmul(A, x), x) + torch.matmul(A, x) + b for x in self.X]
-
-
-    def __len__(self):
-        return len(self.X)
-
-
-    def __getitem__(self, idx):
-        return self.X[idx], self.Y[idx]
+from trace.evaluation.dataset.regression.synthetic_linear import SyntheticLinearRegressionDataset
+from trace.evaluation.dataset.regression.synthetic_quadratic import SyntheticQuadraticRegressionDataset
 
 
 class TestDenseHypernetwork(unittest.TestCase):
@@ -117,7 +89,7 @@ class TestDenseHypernetwork(unittest.TestCase):
 		data = DataLoader(dataset, batch_size=1, shuffle=True)
 		optimizer = optim.SGD(model.parameters(), lr=.03, momentum=0.9)
 		loss_fn = nn.HuberLoss()
-		for _ in range(7):
+		for _ in range(10):
 			for X, Y in data:
 				optimizer.zero_grad()
 				Y_prime = model(X)
@@ -127,7 +99,7 @@ class TestDenseHypernetwork(unittest.TestCase):
 
 		# (Ax)x + Ax + b for x = [1, 1] yields [7, 3]. The tolerance is increased to 
 		# reduce the total number of epochs and speed up the test.
-		assert_close(model(torch.Tensor([[1., 1.]])), torch.Tensor([[7., 3.]]), atol=.01, rtol=0.)
+		assert_close(model(torch.Tensor([[1., 1.]])), torch.Tensor([[7., 3.]]), atol=.03, rtol=0.)
 
 
 if __name__ == '__main__':
