@@ -75,8 +75,6 @@ class TargetPropagationLayer(nn.Module):
 
 
 
-	# TODO: generalize to multiple inputs
 	def inverse(self, y):
-		# e.g. returns x, ParameterDict({"W": W, "b", b})
 		raise NotImplementedError("Each TargetPropagationLayer must implement inverse().")
 
