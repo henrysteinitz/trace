@@ -74,7 +74,6 @@ class TargetPropagationLayer(nn.Module):
 			setattr(self, parameter.parameter_name, parameters[parameter.parameter_name])
 
 
-
 	def inverse(self, y):
 		raise NotImplementedError("Each TargetPropagationLayer must implement inverse().")
 
