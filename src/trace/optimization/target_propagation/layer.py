@@ -10,7 +10,6 @@ class TargetPropagationLayer(nn.Module):
 		self.custom_forward = None
 		self.child_forward = self.forward
 		self.forward = self.forward_override
-		self.forward_inputs = None
 		self.ordered_parameters = None
 		
 
